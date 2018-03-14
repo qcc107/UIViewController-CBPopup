@@ -17,11 +17,11 @@ Just add UIViewController+CBPopup.h and .m files to your project.
 ### Popup your custom viewcontroller
 
 #### In your current viewcontroller:
-```
+```objc
 #import "UIViewController+CBPopup.h"
 ```
 then
-```
+```objc
 UIViewController *vc = [UIViewController new];
 
 vc.view.backgroundColor = [UIColor cyanColor];
@@ -35,7 +35,7 @@ vc.view.layer.masksToBounds = YES;
 
 ### 📴 Dismiss
 
-```
+```objc
 [self cb_dismissPopupViewControllerAnimated:YES];
 ```
 > **IMPORTANT!⚠️**
@@ -43,7 +43,7 @@ vc.view.layer.masksToBounds = YES;
 
 
 ### 🤓 Animation style
-```
+```objc
 typedef NS_ENUM(NSInteger, CBPopupViewAnimation) {
     CBPopupViewAnimationFade = 0,
     CBPopupViewAnimationSlideFromBottom,
@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, CBPopupViewAnimation) {
 ```
 
 ### 🌿 Aligment
-```
+```objc
 typedef NS_ENUM(NSInteger, CBPopupViewAligment) {
     CBPopupViewAligmentCenter = 0,
     CBPopupViewAligmentTop,
