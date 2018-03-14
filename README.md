@@ -32,7 +32,9 @@ vc.view.layer.masksToBounds = YES;
 [self cb_presentPopupViewController:vc animationType:CBPopupViewAnimationFade aligment:CBPopupViewAligmentCenter dismissed:nil];
 
 ```
-### 📴 Dissmiss
+
+### 📴 Dismiss
+
 ```
 [self cb_dismissPopupViewControllerAnimated:YES];
 ```
