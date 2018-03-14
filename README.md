@@ -1,6 +1,6 @@
 # UIViewController+CBPopup
 ## A UIViewController extension, for popup viewcontroller from center, top, bottom.
-![Alt text](https://github.com/qcc107/UIViewController-CBPopup/blob/master/2018-03-14_10_06_03.gif)
+![Alt text](https://github.com/qcc107/UIViewController-CBPopup/blob/master/animation.gif)
 
 ## 🌟 Features
 
