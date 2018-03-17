@@ -29,17 +29,17 @@ vc.view.frame = CGRectMake(0, 0, 285, 250);
 vc.view.layer.cornerRadius = 4.0;
 vc.view.layer.masksToBounds = YES;
 
-[self cb_presentPopupViewController:vc animationType:CBPopupViewAnimationFade aligment:CBPopupViewAligmentCenter dismissed:nil];
+[self cb_presentPopupViewController:vc animationType:CBPopupViewAnimationFade aligment:CBPopupViewAligmentCenter overlayDismissed:nil];
 
 ```
 
 ### 📴 Dismiss
 
 ```objc
-[self cb_dismissPopupViewControllerAnimated:YES];
+[self cb_dismissPopupViewControllerAnimated:YES completion:nil];
 ```
 > **IMPORTANT!⚠️**
->>If you dismiss a viewcontroller, then popup another one immediately, you must use "[self cb_dismissPopupViewControllerAnimated:NO];" to dismiss the previous viewcontroller. 
+>>If you dismiss a viewcontroller, then popup another one immediately, you must use "[self cb_dismissPopupViewControllerAnimated:NO completion:nil];" to dismiss the previous viewcontroller. 
 
 
 ### 🤓 Animation style

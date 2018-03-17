@@ -88,6 +88,13 @@
     }
 
     [self cb_presentPopupViewController:vc animationType:[sender tag] aligment:self.popAligment overlayDismissed:nil];
+
+    [self cb_presentPopupViewController:vc animationType:CBPopupViewAnimationFade aligment:CBPopupViewAligmentCenter overlayDismissed:nil];
+
+    [self cb_dismissPopupViewControllerAnimated:YES];
+
+    [self cb_dismissPopupViewControllerAnimated:YES completion:nil];
+
 }
 
 @end
