@@ -87,7 +87,7 @@
         vc.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, 250);
     }
 
-    [self cb_presentPopupViewController:vc animationType:[sender tag] aligment:self.popAligment dismissed:nil];
+    [self cb_presentPopupViewController:vc animationType:[sender tag] aligment:self.popAligment overlayDismissed:nil];
 }
 
 @end

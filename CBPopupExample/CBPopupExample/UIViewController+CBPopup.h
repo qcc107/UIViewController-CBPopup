@@ -27,21 +27,29 @@ typedef NS_ENUM(NSInteger, CBPopupViewAligment) {
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController;
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
-                            dismissed:(void(^)(void))dismissed;
+                     overlayDismissed:(void(^)(void))overlayDismissed;
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
                         animationType:(CBPopupViewAnimation)animationType;
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
                         animationType:(CBPopupViewAnimation)animationType
-                            dismissed:(void(^)(void))dismissed;
+                     overlayDismissed:(void(^)(void))overlayDismissed;
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
                         animationType:(CBPopupViewAnimation)animationType
                              aligment:(CBPopupViewAligment)aligment
-                            dismissed:(void(^)(void))dismissed;
+                     overlayDismissed:(void(^)(void))overlayDismissed;
 
-- (void)cb_dismissPopupViewControllerAnimated:(BOOL)animated;
-- (void)cb_dismissPopupViewControllerToRootAnimated:(BOOL)animated;
+- (void)cb_presentPopupViewController:(UIViewController*)popupViewController
+                        animationType:(CBPopupViewAnimation)animationType
+                             aligment:(CBPopupViewAligment)aligment
+                overlayDismissEnabled:(BOOL)overlayDismissEnabled
+                     overlayDismissed:(void(^)(void))overlayDismissed;
 
+- (void)cb_dismissPopupViewControllerAnimated:(BOOL)animated
+                                   completion:(void(^)(void))completion;
+
+- (void)cb_dismissPopupViewControllerToRootAnimated:(BOOL)animated
+                                         completion:(void(^)(void))completion;
 @end

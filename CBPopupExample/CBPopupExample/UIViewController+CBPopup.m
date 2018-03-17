@@ -21,8 +21,11 @@ static const CGFloat kPopupAnimationDuration = 0.25;
 @property (assign, nonatomic) CGRect cb_startRect;
 @property (assign, nonatomic) CBPopupViewAligment cb_aligment;
 @property (assign, nonatomic) CBPopupViewAnimation cb_animation;
+@property (assign, nonatomic) BOOL cb_overlayDismissEnabled;
+@property (assign, nonatomic) BOOL cb_dismissing;
+@property (assign, nonatomic) BOOL cb_presenting;
 
-@property (copy, nonatomic) void (^cb_dismissedCallback)(void);
+@property (copy, nonatomic) void (^cb_overlayDismissedCallback)(void);
 @property (copy, nonatomic) NSArray<UIViewController *> *cb_sourceViewControllers;
 
 @end
@@ -31,15 +34,15 @@ static const CGFloat kPopupAnimationDuration = 0.25;
 
 #pragma mark - Extension getters&setters
 
-- (void(^)(void))cb_dismissedCallback
+- (void(^)(void))cb_overlayDismissedCallback
 {
-    return objc_getAssociatedObject(self, @selector(cb_dismissedCallback));
+    return objc_getAssociatedObject(self, @selector(cb_overlayDismissedCallback));
 }
 
-- (void)setCb_dismissedCallback:(void(^)(void))dismissed
+- (void)setCb_overlayDismissedCallback:(void(^)(void))dismissed
 {
     [self willChangeValueForKey:@"cb_dismissedCallback"];
-    objc_setAssociatedObject(self, @selector(cb_dismissedCallback), dismissed, OBJC_ASSOCIATION_COPY);
+    objc_setAssociatedObject(self, @selector(cb_overlayDismissedCallback), dismissed, OBJC_ASSOCIATION_COPY);
     [self didChangeValueForKey:@"cb_dismissedCallback"];
 }
 
@@ -61,12 +64,12 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     }
 }
 
-- (UIButton *)cb_overlayView
+- (UIControl *)cb_overlayView
 {
     return objc_getAssociatedObject(self, @selector(cb_overlayView));
 }
 
-- (void)setCb_overlayView:(UIButton *)overlayView
+- (void)setCb_overlayView:(UIControl *)overlayView
 {
     if (overlayView != self.cb_overlayView)
     {
@@ -136,6 +139,63 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     }
 }
 
+- (BOOL)cb_overlayDismissEnabled
+{
+    NSNumber *value = objc_getAssociatedObject(self, @selector(cb_overlayDismissEnabled));
+    return [value boolValue];
+}
+
+- (void)setCb_overlayDismissEnabled:(BOOL)cb_overlayDismissEnabled
+{
+    if (cb_overlayDismissEnabled != self.cb_overlayDismissEnabled)
+    {
+        [self willChangeValueForKey:@"cb_overlayDismissEnabled"];
+        objc_setAssociatedObject(self,
+                                 @selector(cb_overlayDismissEnabled),
+                                 @(cb_overlayDismissEnabled),
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [self didChangeValueForKey:@"cb_overlayDismissEnabled"];
+    }
+}
+
+- (BOOL)cb_dismissing
+{
+    NSNumber *value = objc_getAssociatedObject(self, @selector(cb_dismissing));
+    return [value boolValue];
+}
+
+- (void)setCb_dismissing:(BOOL)cb_dismissing
+{
+    if (cb_dismissing != self.cb_dismissing)
+    {
+        [self willChangeValueForKey:@"cb_dismissing"];
+        objc_setAssociatedObject(self,
+                                 @selector(cb_dismissing),
+                                 @(cb_dismissing),
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [self didChangeValueForKey:@"cb_dismissing"];
+    }
+}
+
+- (BOOL)cb_presenting
+{
+    NSNumber *value = objc_getAssociatedObject(self, @selector(cb_presenting));
+    return [value boolValue];
+}
+
+- (void)setCb_presenting:(BOOL)cb_presenting
+{
+    if (cb_presenting != self.cb_presenting)
+    {
+        [self willChangeValueForKey:@"cb_presenting"];
+        objc_setAssociatedObject(self,
+                                 @selector(cb_presenting),
+                                 @(cb_presenting),
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [self didChangeValueForKey:@"cb_presenting"];
+    }
+}
+
 - (UIViewController *)cb_popupViewController
 {
     return objc_getAssociatedObject(self, @selector(cb_popupViewController));
@@ -164,53 +224,85 @@ static const CGFloat kPopupAnimationDuration = 0.25;
 }
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
-                            dismissed:(void(^)(void))dismissed
+                     overlayDismissed:(void(^)(void))overlayDismissed
 {
-    [self cb_presentPopupViewController:popupViewController animationType:CBPopupViewAnimationFade aligment:CBPopupViewAligmentCenter dismissed:dismissed];
+    [self cb_presentPopupViewController:popupViewController animationType:CBPopupViewAnimationFade aligment:CBPopupViewAligmentCenter overlayDismissed:overlayDismissed];
 }
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
                         animationType:(CBPopupViewAnimation)animationType
 {
-    [self cb_presentPopupViewController:popupViewController animationType:animationType dismissed:nil];
+    [self cb_presentPopupViewController:popupViewController animationType:animationType overlayDismissed:nil];
 }
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
                         animationType:(CBPopupViewAnimation)animationType
-                            dismissed:(void(^)(void))dismissed
+                     overlayDismissed:(void(^)(void))overlayDismissed
 {
-    [self cb_presentPopupViewController:popupViewController animationType:animationType aligment:CBPopupViewAligmentCenter dismissed:dismissed];
+    [self cb_presentPopupViewController:popupViewController animationType:animationType aligment:CBPopupViewAligmentCenter overlayDismissed:overlayDismissed];
 }
 
 - (void)cb_presentPopupViewController:(UIViewController*)popupViewController
                         animationType:(CBPopupViewAnimation)animationType
                              aligment:(CBPopupViewAligment)aligment
-                            dismissed:(void(^)(void))dismissed
+                     overlayDismissed:(void(^)(void))overlayDismissed
+{
+    [self cb_presentPopupViewController:popupViewController
+                          animationType:animationType
+                               aligment:aligment
+                  overlayDismissEnabled:YES
+                              overlayDismissed:overlayDismissed];
+}
+
+- (void)cb_presentPopupViewController:(UIViewController*)popupViewController
+                        animationType:(CBPopupViewAnimation)animationType
+                             aligment:(CBPopupViewAligment)aligment
+                overlayDismissEnabled:(BOOL)overlayDismissEnabled
+                     overlayDismissed:(void(^)(void))overlayDismissed
 {
     UIViewController *rootVC = [self cb_rootViewController];
 
-    if ([rootVC.cb_sourceViewControllers containsObject:self]) {
-        [rootVC cb_dismissPopupViewControllerWithSourceController:self animated:NO];
+    if (rootVC.cb_dismissing) {
+        return;
     }
-    
+
+    if (rootVC.cb_presenting) {
+        return;
+    }
+
+    rootVC.cb_presenting = YES;
+
+    if ([rootVC.cb_sourceViewControllers containsObject:self]) {
+        [rootVC cb_dismissPopupViewControllerWithSourceController:self animated:NO completion:nil];
+    }
+
     NSMutableArray *sourceViewControllers = [[NSMutableArray alloc] initWithArray:rootVC.cb_sourceViewControllers];
-    
+
+    for (UIViewController *vc in sourceViewControllers) {
+        if (!vc.view.superview) {
+            [rootVC cb_dismissPopupViewControllerWithSourceController:vc animated:NO completion:nil];
+        }
+    }
+
+    sourceViewControllers = [[NSMutableArray alloc] initWithArray:rootVC.cb_sourceViewControllers];
+
     [sourceViewControllers addObject:self];
-    
+
     rootVC.cb_sourceViewControllers = sourceViewControllers;
-    
+
     self.cb_animation = animationType;
     self.cb_aligment = aligment;
     self.cb_popupViewController = popupViewController;
-    
+    self.cb_overlayDismissEnabled = overlayDismissEnabled;
+
     [self cb_updateViewHierachy];
-    
+
     if (!popupViewController.view.superview) {
         [self.cb_overlayView addSubview:popupViewController.view];
     }
 
     popupViewController.view.alpha = 0;
-    
+
     switch (animationType) {
         case CBPopupViewAnimationSlideFromBottom:
         case CBPopupViewAnimationSlideFromTop:
@@ -222,11 +314,12 @@ static const CGFloat kPopupAnimationDuration = 0.25;
             [self cb_fadeViewIn:popupViewController.view];
             break;
     }
-    
-    [self setCb_dismissedCallback:dismissed];
+
+    [self setCb_overlayDismissedCallback:overlayDismissed];
 }
 
 - (void)cb_dismissPopupViewControllerAnimated:(BOOL)animated
+                                   completion:(void(^)(void))completion
 {
     UIViewController *rootVC = [self cb_rootViewController];
     UIViewController *sourceVC = rootVC.cb_sourceViewControllers.lastObject;
@@ -236,23 +329,36 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     }
     
     if (sourceVC) {
-        [self cb_dismissPopupViewControllerWithSourceController:sourceVC animated:animated];
+        [self cb_dismissPopupViewControllerWithSourceController:sourceVC animated:animated completion:completion];
     }
 }
 
 - (void)cb_dismissPopupViewControllerToRootAnimated:(BOOL)animated
+                                         completion:(void(^)(void))completion
 {
     UIViewController *rootVC = [self cb_rootViewController];
     UIViewController *sourceVC = rootVC.cb_sourceViewControllers.firstObject;
     
     if (sourceVC) {
-        [self cb_dismissPopupViewControllerWithSourceController:sourceVC animated:animated];
+        [self cb_dismissPopupViewControllerWithSourceController:sourceVC animated:animated completion:completion];
     }
 }
 
-- (void)cb_dismissPopupViewControllerWithSourceController:(UIViewController *)sourceController animated:(BOOL)animated
+- (void)cb_dismissPopupViewControllerWithSourceController:(UIViewController *)sourceController
+                                                 animated:(BOOL)animated
+                                               completion:(void(^)(void))completion
 {
     UIViewController *rootVC = [self cb_rootViewController];
+
+    if (rootVC.cb_sourceViewControllers.count <= 0) {
+        return;
+    }
+
+    if (rootVC.cb_dismissing) {
+        return;
+    }
+
+    rootVC.cb_dismissing = YES;
     
     NSMutableArray *sourceViewControllers = [[NSMutableArray alloc] initWithArray:rootVC.cb_sourceViewControllers];
     
@@ -267,6 +373,11 @@ static const CGFloat kPopupAnimationDuration = 0.25;
             
             [popupView removeFromSuperview];
             [vcToRemove.cb_overlayView removeFromSuperview];
+
+            vcToRemove.cb_popupViewController = nil;
+            vcToRemove.cb_maskView = nil;
+            vcToRemove.cb_overlayView = nil;
+            vcToRemove.cb_overlayDismissedCallback = nil;
         }
         
         [sourceViewControllers removeObjectsInRange:NSMakeRange(soureIndexToRemove, sourceViewControllers.count - soureIndexToRemove)];
@@ -274,10 +385,30 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     
     if (animated) {
         if (sourceController.cb_animation == CBPopupViewAnimationFade) {
-            [sourceController cb_fadeViewOut];
+            [sourceController cb_fadeViewOutWithCompletion:^{
+
+                if (completion) {
+                    completion();
+                }
+
+                [sourceViewControllers removeObject:sourceController];
+                rootVC.cb_sourceViewControllers = sourceViewControllers;
+                sourceController.cb_overlayDismissedCallback = nil;
+                rootVC.cb_dismissing = NO;
+            }];
         }else
         {
-            [sourceController cb_slideViewOut];
+            [sourceController cb_slideViewOutWithCompletion:^{
+
+                if (completion) {
+                    completion();
+                }
+
+                sourceController.cb_overlayDismissedCallback = nil;
+                [sourceViewControllers removeObject:sourceController];
+                rootVC.cb_sourceViewControllers = sourceViewControllers;
+                rootVC.cb_dismissing = NO;
+            }];
         }
     }else
     {
@@ -285,12 +416,20 @@ static const CGFloat kPopupAnimationDuration = 0.25;
         
         [popupView removeFromSuperview];
         [sourceController.cb_overlayView removeFromSuperview];
-    }
-    
-    sourceController.cb_popupViewController = nil;
 
-    [sourceViewControllers removeObject:sourceController];
-    rootVC.cb_sourceViewControllers = sourceViewControllers;
+        if (completion) {
+            completion();
+        }
+
+        sourceController.cb_popupViewController = nil;
+        sourceController.cb_maskView = nil;
+        sourceController.cb_overlayView = nil;
+        sourceController.cb_overlayDismissedCallback = nil;
+
+        [sourceViewControllers removeObject:sourceController];
+        rootVC.cb_sourceViewControllers = sourceViewControllers;
+        rootVC.cb_dismissing = NO;
+    }
 }
 
 #pragma mark - Animations
@@ -397,7 +536,9 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     popupView.frame = popupStartRect;
     popupView.alpha = 1.0;
     self.cb_maskView.alpha = 0;
-    
+
+    UIViewController *rootVC = [self cb_rootViewController];
+
     [UIView animateWithDuration:kPopupAnimationDuration delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         
         [self.cb_popupViewController viewWillAppear:NO];
@@ -406,10 +547,12 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     } completion:^(BOOL finished) {
         
         [self.cb_popupViewController viewDidAppear:NO];
+        rootVC.cb_presenting = NO;
     }];
 }
 
-- (void)cb_slideViewOut
+- (void)cb_slideViewOutWithCompletion:(void(^)(void))completion
+
 {
     UIView *popupView = self.cb_popupViewController.view;
     
@@ -425,17 +568,14 @@ static const CGFloat kPopupAnimationDuration = 0.25;
                             
                             [popupView removeFromSuperview];
                             [self.cb_overlayView removeFromSuperview];
-                            self.cb_popupViewController = nil;
                             [self.cb_popupViewController viewDidDisappear:NO];
 
+                            self.cb_popupViewController = nil;
                             self.cb_maskView = nil;
                             self.cb_overlayView = nil;
 
-                            id dismissed = [self cb_dismissedCallback];
-                            if (dismissed != nil)
-                            {
-                                ((void(^)(void))dismissed)();
-                                [self setCb_dismissedCallback:nil];
+                            if (completion) {
+                                completion();
                             }
                         }];
 }
@@ -473,7 +613,8 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     popupView.alpha = 0;
     self.cb_maskView.alpha = 0;
     
-    
+    UIViewController *rootVC = [self cb_rootViewController];
+
     [UIView animateWithDuration:kPopupAnimationDuration animations:^{
         
         [self.cb_popupViewController viewWillAppear:NO];
@@ -482,10 +623,11 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     } completion:^(BOOL finished) {
         
         [self.cb_popupViewController viewDidAppear:NO];
+        rootVC.cb_presenting = NO;
     }];
 }
 
-- (void)cb_fadeViewOut
+- (void)cb_fadeViewOutWithCompletion:(void(^)(void))completion
 {
     UIView *popupView = self.cb_popupViewController.view;
     
@@ -499,16 +641,14 @@ static const CGFloat kPopupAnimationDuration = 0.25;
         [popupView removeFromSuperview];
         [self.cb_overlayView removeFromSuperview];
         
-        self.cb_popupViewController = nil;
         [self.cb_popupViewController viewDidDisappear:NO];
+
+        self.cb_popupViewController = nil;
         self.cb_maskView = nil;
         self.cb_overlayView = nil;
 
-        id dismissed = [self cb_dismissedCallback];
-        if (dismissed != nil)
-        {
-            ((void(^)(void))dismissed)();
-            [self setCb_dismissedCallback:nil];
+        if (completion) {
+            completion();
         }
     }];
 }
@@ -581,7 +721,10 @@ static const CGFloat kPopupAnimationDuration = 0.25;
 
 - (void)cb_tapAction:(id)sender
 {
-    [self cb_dismissPopupViewControllerAnimated:YES];
+    if (!self.cb_overlayDismissEnabled) {
+        return;
+    }
+    [self cb_dismissPopupViewControllerAnimated:YES completion:self.cb_overlayDismissedCallback];
 }
 
 @end
