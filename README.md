@@ -1,12 +1,12 @@
-![](Resources/title.jpg)
+![](https://github.com/qcc107/UIViewController-CBPopup/blob/master/title.jpg)
 
 [![language](https://img.shields.io/badge/Language-Objective--C-7D6FFF.svg)](https://developer.apple.com/documentation/objectivec)&nbsp;
 [![language](https://img.shields.io/badge/Language-Swift-6986FF.svg)](https://github.com/apple/swift)&nbsp;
-[![Build Status](https://api.travis-ci.org/Lision/LSAnimator.svg?branch=master)](https://travis-ci.org/Lision/LSAnimator)&nbsp;
+[![Build Status](https://travis-ci.org/qcc107/UIViewController-CBPopup.svg?branch=master)](https://travis-ci.org/qcc107/UIViewController-CBPopup)&nbsp;
 [![Support](https://img.shields.io/badge/support-iOS%209%2B%20-orange.svg?style=flat)](https://www.apple.com/nl/ios/)
 
 # Using
-![](Resources/animation.gif)
+![](https://github.com/qcc107/UIViewController-CBPopup/blob/master/animation.gif)
 
 ## 🌟 Features
 
@@ -23,11 +23,11 @@ Just add UIViewController+CBPopup.h and .m files to your project.
 ### Popup your custom viewcontroller
 
 #### In your current viewcontroller:
-```objc
+```obj-c
 #import "UIViewController+CBPopup.h"
 ```
 then
-```objc
+```obj-c
 UIViewController *vc = [UIViewController new];
 
 vc.view.backgroundColor = [UIColor cyanColor];
@@ -41,7 +41,7 @@ vc.view.layer.masksToBounds = YES;
 
 ### 📴 Dismiss
 
-```objc
+```obj-c
 [self cb_dismissPopupViewControllerAnimated:YES completion:nil];
 ```
 > **IMPORTANT!⚠️**
@@ -49,7 +49,7 @@ vc.view.layer.masksToBounds = YES;
 
 
 ### 🤓 Animation style
-```objc
+```obj-c
 typedef NS_ENUM(NSInteger, CBPopupViewAnimation) {
     CBPopupViewAnimationFade = 0,
     CBPopupViewAnimationSlideFromBottom,
@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, CBPopupViewAnimation) {
 ```
 
 ### 🌿 Aligment
-```objc
+```obj-c
 typedef NS_ENUM(NSInteger, CBPopupViewAligment) {
     CBPopupViewAligmentCenter = 0,
     CBPopupViewAligmentTop,
