@@ -1,6 +1,6 @@
 language: objective-c
 osx_image: xcode9
-xcode_project: CBPopupExample.xcodeproj
+xcode_project: CBPopupExample/CBPopupExample.xcodeproj
 xcode_scheme: CBPopupExample
 
 before_install:
