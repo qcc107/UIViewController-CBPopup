@@ -1,11 +1,21 @@
 language: objective-c
-osx_image: xcode9
-xcode_project: CBPopupExample.xcodeproj
-xcode_scheme: CBPopupExample
+os: osx
+osx_image: xcode9.2
 
-before_install:
-- env
-- xcodebuild -version
-- xcodebuild -showsdks
-- xcpretty --version
+env:
+  global:
+    - LC_CTYPE=en_US.UTF-8
+    - PROJECT=MoreCodable.xcodeproj
+    - CONFIG=Release
+    - ACTION="build-for-testing test-without-building"
 
+branches:
+  only: 
+    - master
+
+script:
+  - set -o pipefail
+  - xcodebuild $ACTION -project $PROJECT -scheme $SCHEME -sdk $SDK -destination 'name=iPhone 7,OS=11.2' -configuration $CONFIG ENABLE_TESTABILITY=YES | xcpretty
+
+notifications:
+  email: false
