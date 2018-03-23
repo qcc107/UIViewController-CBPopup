@@ -1,7 +1,12 @@
-![Alt text](https://github.com/qcc107/UIViewController-CBPopup/blob/master/title.jpg)
+![](Resources/title.jpg)
+
+[![language](https://img.shields.io/badge/Language-Objective--C-7D6FFF.svg)](https://developer.apple.com/documentation/objectivec)&nbsp;
+[![language](https://img.shields.io/badge/Language-Swift-6986FF.svg)](https://github.com/apple/swift)&nbsp;
+[![Build Status](https://api.travis-ci.org/Lision/LSAnimator.svg?branch=master)](https://travis-ci.org/Lision/LSAnimator)&nbsp;
+[![Support](https://img.shields.io/badge/support-iOS%209%2B%20-orange.svg?style=flat)](https://www.apple.com/nl/ios/)
 
 # Using
-![Alt text](https://github.com/qcc107/UIViewController-CBPopup/blob/master/animation.gif)
+![](Resources/animation.gif)
 
 ## 🌟 Features
 
