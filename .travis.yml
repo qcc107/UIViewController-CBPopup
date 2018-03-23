@@ -14,8 +14,8 @@ env:
 
 branches:
   only: 
-    - maste
-r
+    - master
+
 before_install:
   - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
 
