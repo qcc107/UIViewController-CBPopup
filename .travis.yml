@@ -7,7 +7,6 @@ env:
     - LC_CTYPE=en_US.UTF-8
     - PROJECT=CBPopupExample.xcodeproj
     - CONFIG=Release
-    - ACTION="build-for-testing test-without-building"
 
 branches:
   only: 
