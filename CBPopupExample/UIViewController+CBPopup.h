@@ -47,6 +47,22 @@ typedef NS_ENUM(NSInteger, CBPopupViewAligment) {
                 overlayDismissEnabled:(BOOL)overlayDismissEnabled
                      overlayDismissed:(void(^)(void))overlayDismissed;
 
+/**
+ Pop up a view controller
+ @param popupViewController viewcontroller to popup.
+ @param animationType type of animation, default fade.
+ @param aligment three aligmen to option,center,left,right.
+ @param margin distance to the top or bottom, this param only used when aligment is set CBPopupViewAligmentTop or CBPopupViewAligmentBottom.
+ @param overlayDismissEnabled where dismiss when Clicking the background.
+ @param overlayDismissed overlay dismiss callback,this param is used when overlayDismissEnabled is set to YES.
+ */
+- (void)cb_presentPopupViewController:(UIViewController*)popupViewController
+                        animationType:(CBPopupViewAnimation)animationType
+                             aligment:(CBPopupViewAligment)aligment
+                               margin:(CGFloat)margin
+                overlayDismissEnabled:(BOOL)overlayDismissEnabled
+                     overlayDismissed:(void(^)(void))overlayDismissed;
+
 - (void)cb_dismissPopupViewControllerAnimated:(BOOL)animated
                                    completion:(void(^)(void))completion;
 

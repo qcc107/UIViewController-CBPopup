@@ -24,6 +24,7 @@ static const CGFloat kPopupAnimationDuration = 0.25;
 @property (assign, nonatomic) BOOL cb_overlayDismissEnabled;
 @property (assign, nonatomic) BOOL cb_dismissing;
 @property (assign, nonatomic) BOOL cb_presenting;
+@property (assign, nonatomic) CGFloat cb_margin;
 
 @property (copy, nonatomic) void (^cb_overlayDismissedCallback)(void);
 @property (copy, nonatomic) NSArray<UIViewController *> *cb_sourceViewControllers;
@@ -196,6 +197,25 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     }
 }
 
+- (CGFloat)cb_margin
+{
+    NSNumber *value = objc_getAssociatedObject(self, @selector(cb_margin));
+    return [value floatValue];
+}
+
+- (void)setCb_margin:(CGFloat)cb_margin
+{
+    if (cb_margin != self.cb_margin)
+    {
+        [self willChangeValueForKey:@"cb_margin"];
+        objc_setAssociatedObject(self,
+                                 @selector(cb_margin),
+                                 @(cb_margin),
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [self didChangeValueForKey:@"cb_margin"];
+    }
+}
+
 - (UIViewController *)cb_popupViewController
 {
     return objc_getAssociatedObject(self, @selector(cb_popupViewController));
@@ -260,6 +280,21 @@ static const CGFloat kPopupAnimationDuration = 0.25;
                 overlayDismissEnabled:(BOOL)overlayDismissEnabled
                      overlayDismissed:(void(^)(void))overlayDismissed
 {
+    [self cb_presentPopupViewController:popupViewController
+                          animationType:animationType
+                               aligment:aligment
+                                 margin:0
+                  overlayDismissEnabled:YES
+                       overlayDismissed:overlayDismissed];
+}
+
+- (void)cb_presentPopupViewController:(UIViewController*)popupViewController
+                        animationType:(CBPopupViewAnimation)animationType
+                             aligment:(CBPopupViewAligment)aligment
+                               margin:(CGFloat)margin
+                overlayDismissEnabled:(BOOL)overlayDismissEnabled
+                     overlayDismissed:(void(^)(void))overlayDismissed
+{
     UIViewController *rootVC = [self cb_rootViewController];
 
     if (rootVC.cb_dismissing) {
@@ -294,6 +329,7 @@ static const CGFloat kPopupAnimationDuration = 0.25;
     self.cb_aligment = aligment;
     self.cb_popupViewController = popupViewController;
     self.cb_overlayDismissEnabled = overlayDismissEnabled;
+    self.cb_margin = margin;
 
     [self cb_updateViewHierachy];
 
@@ -459,13 +495,13 @@ static const CGFloat kPopupAnimationDuration = 0.25;
                     break;
                 case CBPopupViewAligmentTop:
                     popupStartRect = CGRectMake(-sourceSize.width,
-                                                0,
+                                                self.cb_margin,
                                                 popupSize.width,
                                                 popupSize.height);
                     break;
                 case CBPopupViewAligmentBottom:
                     popupStartRect = CGRectMake(-sourceSize.width,
-                                                sourceSize.height - popupSize.height,
+                                                sourceSize.height - popupSize.height - self.cb_margin,
                                                 popupSize.width,
                                                 popupSize.height);
                     break;
@@ -488,13 +524,13 @@ static const CGFloat kPopupAnimationDuration = 0.25;
                     break;
                 case CBPopupViewAligmentTop:
                     popupStartRect = CGRectMake(sourceSize.width,
-                                                0,
+                                                self.cb_margin,
                                                 popupSize.width,
                                                 popupSize.height);
                     break;
                 case CBPopupViewAligmentBottom:
                     popupStartRect = CGRectMake(sourceSize.width,
-                                                sourceSize.height - popupSize.height,
+                                                sourceSize.height - popupSize.height - self.cb_margin,
                                                 popupSize.width,
                                                 popupSize.height);
                     break;
@@ -521,13 +557,13 @@ static const CGFloat kPopupAnimationDuration = 0.25;
             break;
         case CBPopupViewAligmentTop:
             popupEndRect = CGRectMake((sourceSize.width - popupSize.width) * 0.5,
-                                      0,
+                                      self.cb_margin,
                                       popupSize.width,
                                       popupSize.height);
             break;
         case CBPopupViewAligmentBottom:
             popupEndRect = CGRectMake((sourceSize.width - popupSize.width) * 0.5,
-                                      sourceSize.height - popupSize.height,
+                                      sourceSize.height - popupSize.height - self.cb_margin,
                                       popupSize.width,
                                       popupSize.height);
             break;
@@ -597,13 +633,13 @@ static const CGFloat kPopupAnimationDuration = 0.25;
             break;
         case CBPopupViewAligmentTop:
             popupEndRect = CGRectMake((sourceSize.width - popupSize.width) * 0.5,
-                                      0,
+                                      self.cb_margin,
                                       popupSize.width,
                                       popupSize.height);
             break;
         case CBPopupViewAligmentBottom:
             popupEndRect = CGRectMake((sourceSize.width - popupSize.width) * 0.5,
-                                      sourceSize.height - popupSize.height,
+                                      sourceSize.height - popupSize.height - self.cb_margin,
                                       popupSize.width,
                                       popupSize.height);
             break;
